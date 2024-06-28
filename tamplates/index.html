@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ascii-Art-Style</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <h2>Ascii-Art-Style</h2>
+    <form action="/submit" method="post">
+        <div>
+            <label for="message">Text:</label>
+            <textarea name="message" id="message" rows="8" placeholder="Type something..." required></textarea>
+        </div>
+        <div>
+            <label for="bannerfiles">Fonts:</label>
+            <select id="bannerfiles" name="bannerfiles">
+                <option value="standard">Standard</option>
+                <option value="shadow">Shadow</option>
+                <option value="thinkertoy">Thinkertoy</option>
+            </div>
+            <button class="submit">Generate</button>
+        </fieldset>
+        
+    </form>
+</body>
+</html>
