@@ -1,16 +1,10 @@
-/* style.css */
 
-/* Reset some default styles */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-/* Basic styling for the form */
-body {
+/*body {
     font-family: Arial, sans-serif;
     background-color: #f9f9f9;
+    min-height: 100vh;
+    padding: 20px;
+    margin: 0;
 }
 
 h2 {
@@ -19,12 +13,13 @@ h2 {
 }
 
 form {
-    max-width: 400px;
     margin: 0 auto;
     padding: 20px;
-    background-color: #ffffff;
+    background-color: green;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    max-width: 1500px;
+    width: 100%;
 }
 
 label {
@@ -34,24 +29,34 @@ label {
 }
 
 textarea {
-    width: 100%;
+    width: 50%;
     height: 100px;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 3px;
     resize: vertical;
+    /* margin: px; */
+/*}
+
+.form {
+    align-items: center;
 }
 
 select {
-    width: 100%;
+    width: 50%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 3px;
 }
 
+ button {
+    padding: 6px;
+    margin: 2px;
+ }
+
 button.submit {
     display: block;
-    width: 100%;
+    width: 25%;
     padding: 10px;
     background-color: #007bff;
     color: #ffffff;
@@ -79,4 +84,84 @@ button.submit:hover {
 
 .submit:hover {
     background-color: #0056b3;
+}
+*/
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    background-color: #f4f4f4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    text-align: center;
+}
+
+h2 {
+    margin-bottom: 20px;
+}
+
+.ascii-form {
+    background: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 900px;
+    max-width: 100%;
+    text-align: center;
+}
+
+.form-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.input-section, .control-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    margin: 0 10px;
+}
+
+.input-section, .control-section {
+    width: 50%;
+    box-sizing: border-box;
+}
+
+textarea {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+select, button {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+}
+
+button.submit {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button.submit:hover {
+    background-color: #0056b3;
+}
+
+.output-section {
+    width: 100%;
+    max-width: 800px;
+    padding: 20px;
+    border-top: 1px solid #ddd;
+    height: 400px;
+    overflow: auto; /* This enables both horizontal and vertical scrolling */
 }
