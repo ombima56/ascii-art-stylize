@@ -77,3 +77,8 @@ button.submit:hover {
     height: 400px;
     overflow: auto; /* This enables both horizontal and vertical scrolling */
 }
+
+pre {
+    white-space: pre-wrap; /* Ensures long lines are wrapped */
+    text-align: left; /* Keeps the ASCII art aligned to the left */
+}

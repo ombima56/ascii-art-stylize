@@ -1,10 +1,12 @@
 package main
 
 import (
-	Ascii "ascii-art-stylize/ascii"
 	"html/template"
 	"log"
 	"net/http"
+	"strings"
+
+	Ascii "ascii-art-stylize/ascii"
 )
 
 func main() {
@@ -53,12 +55,21 @@ func submitHandler(w http.ResponseWriter, r *http.Request) {
 
 	message := r.FormValue("message")
 	bannerfile := r.FormValue("bannerfile")
+	if message == "" || bannerfile == "" {
+		http.Error(w, "400 Bad Request", http.StatusBadRequest)
+		return
+	}
 
-	data := Ascii.PrintBanner(message, bannerfile)
-	if data == "" {
+	data := strings.Split(message, "\r\n")
+	var asciified string
+	for _, ch := range data {
+		asciified += Ascii.PrintBanner(ch, bannerfile)
+	}
+
+	if asciified == "" {
 		http.Error(w, "500 Internal Server Error", http.StatusInternalServerError)
 		return
 	}
 
-	w.Write([]byte(data))
+	w.Write([]byte(asciified))
 }
