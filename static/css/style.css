@@ -74,11 +74,18 @@ button.submit:hover {
     max-width: 800px;
     padding: 20px;
     border-top: 1px solid #ddd;
-    height: 400px;
-    overflow: auto; /* This enables both horizontal and vertical scrolling */
+    max-height: 400px; /* Set a maximum height for the output section */
+    overflow: auto; /* Enable scrolling for the output section */
 }
 
-pre {
-    white-space: pre-wrap; /* Ensures long lines are wrapped */
-    text-align: left; /* Keeps the ASCII art aligned to the left */
+/* Added CSS for scrolling overflow */
+.ascii-output {
+    max-width: 100%;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    background: #f8f8f8;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
 }
+

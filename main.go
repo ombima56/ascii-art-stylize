@@ -34,7 +34,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err2 := tmpl.Execute(w, r)
+	err2 := tmpl.Execute(w, nil)
 	if err2 != nil {
 		http.Error(w, "500 Internal Server Error", http.StatusInternalServerError)
 		log.Printf("Error executing template: %v", err2)
@@ -71,5 +71,22 @@ func submitHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Write([]byte(asciified))
+	// w.Write([]byte(asciified))
+	Data := struct {
+		Ans string
+	}{
+		Ans: asciified,
+	}
+	tmpl, err := template.ParseFiles("templates/index.html")
+	if err != nil {
+		http.Error(w, "400 Bad Request", http.StatusBadRequest)
+		log.Printf("Error parsing template: %v", err)
+		return
+	}
+	err2 := tmpl.Execute(w, Data)
+	if err2 != nil {
+		http.Error(w, "500 Internal Server Error", http.StatusInternalServerError)
+		log.Printf("Error executing template: %v", err2)
+		return
+	}
 }
