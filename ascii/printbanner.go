@@ -1,4 +1,4 @@
-package Ascii
+package ascii
 
 import (
 	"fmt"
@@ -6,17 +6,17 @@ import (
 )
 
 // PrintBanner prints the input string using the loaded banner characters.
-func PrintBanner(line, filename string) string {
+func PrintBanner(line, filename string) (string, error) {
 	outPut := make([][]string, 8) // Output slice to store the banner lines.
 
 	banner, err := LoadBanner(filename)
 	if err != nil {
-		return fmt.Sprintf("Error loading banner: %v", err)
+		return "", fmt.Errorf("error loading banner: %w", err)
 	}
 
 	for _, char := range line {
 		if char < 32 || char > 126 {
-			return fmt.Sprintf("Character out of range: %q\n", char)
+			return "", fmt.Errorf("character out of range: %q", char)
 		}
 		if ascii, ok := banner[char]; ok {
 			asciiLines := strings.Split(ascii, "\n")
@@ -24,14 +24,16 @@ func PrintBanner(line, filename string) string {
 				outPut[i] = append(outPut[i], asciiLines[i])
 			}
 		} else {
-			return fmt.Sprintf("Character not found: %q\n", char)
+			return "", fmt.Errorf("character not found: %q", char)
 		}
 	}
-	result := string('\n')
+
+	var result strings.Builder
 	// Print the assembled output lines
 	for _, line := range outPut {
-		result += (strings.Join(line, "")) + string('\n')
+		result.WriteString(strings.Join(line, ""))
+		result.WriteString("\n")
 	}
 
-	return result
+	return result.String(), nil
 }
