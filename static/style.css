@@ -1,0 +1,242 @@
+body {
+    background: #0d3642;
+    color: #f0f0f0;
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    width: 100%;
+    max-width: 900px;
+    padding: 20px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.logo {
+    font-size: 4rem;
+    color: #2d8bcb;
+    margin: 20px 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    text-align: left;
+}
+
+h2 {
+    margin-bottom: 30px;
+    font-size: 3.4rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.ascii-form {
+    background: #13465c;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.ascii-form:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.form-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.input-section label,
+.control-section label {
+    font-size: 1.2rem;
+    display: block;
+    margin-bottom: 5px;
+}
+
+textarea {
+    font-size: 1rem;
+    color: #f0f0f0;
+    background-color: #1d6188;
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #0d3642;
+    border-radius: 5px;
+    padding: 10px;
+    transition: border-color 0.3s;
+}
+
+textarea::placeholder {
+    font-size: 1.5rem;
+}
+
+textarea:focus {
+    border-color: #007BFF;
+}
+
+select,
+button {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    margin-top: 10px;
+    font-size: 20px;
+    border-radius: 6px;
+    border: 1px solid #2d8bcb;
+    transition: border-color 0.3s, background-color 0.3s;
+}
+
+select {
+    font-size: 1.5rem;
+    color: #f0f0f0;
+    background-color: #13465c;
+}
+
+select:focus,
+button:focus {
+    border-color: #007BFF;
+}
+
+button.submit {
+    background-color: #2d8bcb;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+button.submit:hover {
+    background-color: #0056b3;
+}
+
+.ascii-output-container {
+    margin: 15px 0;
+    width: 100%;
+    max-width: 800px;
+    overflow: hidden;
+}
+
+/* .ascii-output {
+    padding: 20px;
+    border-radius: 5px;
+    border: 1px solid #13465c;
+    background: #13465c;
+    overflow-x: auto;
+    overflow-y: auto;
+    max-height: 300px;
+    text-align: left;
+    color: #f0f0f0;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    word-wrap: break-word;
+} */
+
+.ascii-output {
+    margin-top: 20px;
+    width: 100%;
+    max-width: 800px;
+    text-align: left;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #13465c;
+    background: #13465c;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-height: 300px;
+    overflow: auto;
+}
+
+footer {
+    background-color: #0d3642;
+    width: 100%;
+    padding: 20px 0;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.footer {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    color: aliceblue;
+}
+
+.footer-links {
+    display: flex;
+    gap: 20px;
+}
+
+.footer a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #f0f0f0;
+}
+
+.footer img {
+    width: 30px;
+    height: 30px;
+    border-radius: 10px;
+}
+
+.footer p {
+    margin: 5px 0 0 0;
+}
+
+/* Media Queries */
+/* For small phones (portrait) */
+@media (max-width: 576px) {
+    h2 {
+        font-size: 1rem;
+    }
+    .logo {
+        font-size: 2.5rem;
+    }
+    select, button, textarea {
+        width: 100%;
+    }
+    .footer {
+        width: 90%;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .ascii-output {
+        max-height: 100px;
+        max-width: 350px;
+    }
+    .ascii-form {
+        padding: 10px;
+    }
+    select {
+        font-size: 1rem;
+    }
+}
+
+/* For medium phones (portrait) */
+@media (max-width: 768px) {
+    h2 {
+        font-size: 2.5rem;
+    }
+    .logo {
+        font-size: 3rem;
+    }
+    select, button, textarea {
+        width: 100%;
+    }
+    .footer {
+        width: 80%;
+    }
+    select {
+        font-size: 1rem;
+    }
+}

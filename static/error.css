@@ -1,0 +1,88 @@
+/* General Styles */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #0d3642;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Error Container Styles */
+.error-container {
+    text-align: center;
+    padding: 40px;
+    background: #1d6188;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    animation: fadeIn 0.5s ease-in-out;
+    max-width: 90%;
+    margin: auto;
+}
+
+.error-code {
+    font-size: 5rem;
+    color: #d9534f;
+    margin: 0;
+}
+
+.error-message {
+    font-size: 2rem;
+    color: white;
+    margin: 20px 0;
+}
+
+.back-button {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #2d8bcb;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    font-size: 1.2rem;
+}
+
+.back-button:hover {
+    background-color: #0056b3;
+}
+
+/* Keyframes */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Media Queries */
+/* For small phones (portrait) */
+@media (max-width: 576px) {
+    .error-code {
+        font-size: 3rem;
+    }
+    .error-message {
+        font-size: 1.5rem;
+    }
+    .back-button {
+        font-size: 1rem;
+    }
+}
+
+/* For medium phones (portrait) */
+@media (max-width: 768px) {
+    .error-code {
+        font-size: 4rem;
+    }
+    .error-message {
+        font-size: 1.75rem;
+    }
+    .back-button {
+        font-size: 1.1rem;
+    }
+}
