@@ -4,34 +4,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ascii-Art-Style</title>
-    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h2>Ascii-Art-Style</h2>
-    <form action="/submit" method="post" class="ascii-form">
-        <div class="form-row">
-            <div class="input-section">
-                <label for="message">Text:</label>
-                <textarea name="message" id="message" rows="8" placeholder="Type something..." required></textarea>
+    <header>
+        <div class="logo">Ascii Art</div>
+    </header>
+    <main class="body">
+        <h2>Ascii-Art-Generator</h2>
+        <form action="/ascii-art" method="post" class="ascii-form">
+            <div class="form-row">
+                <div class="input-section">
+                    <label for="message"></label>
+                    <textarea name="message" id="message" rows="8" cols="30" placeholder="Type something..." required>{{.Input}}</textarea>
+                </div>
+                <div class="control-section">
+                    <label for="bannerfile"></label>
+                    <select id="bannerfile" name="bannerfile">
+                        <option value="standard">Standard</option>
+                        <option value="shadow">Shadow</option>
+                        <option value="thinkertoy">Thinkertoy</option>
+                    </select>
+                    <button type="submit" class="submit">Generate</button>
+                </div>
             </div>
-            <div class="control-section">
-                <label for="bannerfile">Fonts:</label>
-                <select id="bannerfile" name="bannerfile">
-                    <option value="standard">Standard</option>
-                    <option value="shadow">Shadow</option>
-                    <option value="thinkertoy">Thinkertoy</option>
-                </select>
-                <button type="submit" class="submit">Generate</button>
+        </form>
+        <div class="ascii-output-container">
+            <div class="ascii-output">
+                <pre>{{.Ans}}</pre>
             </div>
         </div>
-    </form>
-    <div class="ascii-output">
-        <pre>{{.Ans}}</pre>
-    </div>
+    </main>
     <footer>
-        <a href="https://github.com/ombima56" target="_blank">
-            <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub">
-        </a>
+        <div class="footer">
+            <div class="footer-links">
+                <a href="https://github.com/ombima56" target="_blank">
+                    <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub">
+                </a>    
+            </div>
+            &copy; 2024 Ascii-Art-Style
+        </div>
     </footer>
 </body>
 </html>
