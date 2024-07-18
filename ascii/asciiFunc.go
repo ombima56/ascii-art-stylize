@@ -1,28 +1,54 @@
-package Ascii
+package ascii
 
 import (
+	"errors"
 	"html/template"
 	"log"
 	"net/http"
+	"os"
 	"strings"
 )
 
+func ErrorHandler(w http.ResponseWriter, errMsg string, statusCode int) {
+	tmpl, err := template.ParseFiles("templates/error.html")
+	if err != nil {
+		http.Error(w, "500 Internal Server Error", http.StatusInternalServerError)
+		log.Printf("Error parsing error template: %v", err)
+		return
+	}
+
+	data := struct {
+		StatusCode int
+		ErrMsg     string
+	}{
+		StatusCode: statusCode,
+		ErrMsg:     errMsg,
+	}
+
+	w.WriteHeader(statusCode)
+	err = tmpl.Execute(w, data)
+	if err != nil {
+		http.Error(w, "500 Internal Server Error", http.StatusInternalServerError)
+		log.Printf("Error executing error template: %v", err)
+	}
+}
+
 func IndexHandler(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" {
-		http.Error(w, "404 Page Not Found", http.StatusNotFound)
+		ErrorHandler(w, "Page Not Found", http.StatusNotFound)
 		return
 	}
 
 	tmpl, err := template.ParseFiles("templates/index.html")
 	if err != nil {
-		http.Error(w, "400 Bad Request", http.StatusBadRequest)
+		ErrorHandler(w, "Page Not Found", http.StatusNotFound)
 		log.Printf("Error parsing template: %v", err)
 		return
 	}
 
 	err2 := tmpl.Execute(w, nil)
 	if err2 != nil {
-		http.Error(w, "500 Internal Server Error", http.StatusInternalServerError)
+		ErrorHandler(w, "Internal Server Error", http.StatusInternalServerError)
 		log.Printf("Error executing template: %v", err2)
 		return
 	}
@@ -30,48 +56,70 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 
 func SubmitHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
-		http.Error(w, "405 Method Not Allowed", http.StatusMethodNotAllowed)
+		ErrorHandler(w, "Method Not Allowed", http.StatusMethodNotAllowed)
 		return
 	}
 
-	if r.URL.Path != "/submit" {
-		http.Error(w, "404 Page Not Found", http.StatusNotFound)
+	if r.URL.Path != "/ascii-art" {
+		ErrorHandler(w, "Page Not Found", http.StatusNotFound)
 		return
 	}
 
 	message := r.FormValue("message")
 	bannerfile := r.FormValue("bannerfile")
 	if message == "" || bannerfile == "" {
-		http.Error(w, "400 Bad Request", http.StatusBadRequest)
+		ErrorHandler(w, "Bad Request: Missing message or banner file", http.StatusBadRequest)
+		return
+	}
+
+	// Construct the file path
+	filePath := "bannerfiles/" + bannerfile + ".txt"
+
+	// Check if the banner file exists and has not been altered
+	_, err := FileCheck(filePath)
+	if err != nil {
+		if errors.Is(err, os.ErrNotExist) {
+			ErrorHandler(w, "Internal Server Error: Banner file not found", http.StatusInternalServerError)
+			log.Printf("Banner file not found: %s", filePath)
+		} else if err.Error() == "the banner file has been altered" {
+			ErrorHandler(w, "Internal Server Error: An unexpected error occurred. Please try again later.", http.StatusInternalServerError)
+			log.Printf("Banner file altered: %s", filePath)
+		} else {
+			ErrorHandler(w, "Internal Server Error: An unexpected error occurred. Please try again later.", http.StatusInternalServerError)
+			log.Printf("Error with banner file: %v", err)
+		}
 		return
 	}
 
 	data := strings.Split(message, "\r\n")
-	var asciified string
+	var asciified strings.Builder
 	for _, ch := range data {
-		asciified += PrintBanner(ch, bannerfile)
-	}
-
-	if asciified == "" {
-		http.Error(w, "500 Internal Server Error", http.StatusInternalServerError)
-		return
+		result, err := PrintBanner(ch, bannerfile)
+		if err != nil {
+			ErrorHandler(w, "Bad Request: Please use valid characters. Only printable characters from the ASCII table are allowed.", http.StatusBadRequest)
+			log.Printf("Error printing banner: %v", err)
+			return
+		}
+		asciified.WriteString(result)
 	}
 
 	Data := struct {
-		Ans string
+		Ans   string
+		Input string
 	}{
-		Ans: asciified,
+		Ans:   asciified.String(),
+		Input: message,
 	}
 	tmpl, err := template.ParseFiles("templates/index.html")
 	if err != nil {
-		http.Error(w, "400 Bad Request", http.StatusBadRequest)
+		ErrorHandler(w, "Internal Server Error: An unexpected error occurred. Please try again later.", http.StatusInternalServerError)
 		log.Printf("Error parsing template: %v", err)
 		return
 	}
-	err2 := tmpl.Execute(w, Data)
-	if err2 != nil {
-		http.Error(w, "500 Internal Server Error", http.StatusInternalServerError)
-		log.Printf("Error executing template: %v", err2)
-		return
+
+	err = tmpl.Execute(w, Data)
+	if err != nil {
+		ErrorHandler(w, "Internal Server Error: An unexpected error occurred. Please try again later.", http.StatusInternalServerError)
+		log.Printf("Error executing template: %v", err)
 	}
 }
