@@ -1,23 +1,31 @@
-package Ascii
+package ascii
 
 import (
 	"errors"
+	"fmt"
 	"os"
 )
 
 func FileCheck(fileName string) (string, error) {
-	var fileSize int64
-
 	fileInfo, err := os.Stat(fileName)
 	if err != nil {
-		return fileName, err
+		return fileName, fmt.Errorf("error stating file: %v", err)
 	}
-	fileSize = fileInfo.Size()
 
-	if (fileName == "bannerfile/standard.txt" && fileSize != 6623) ||
-		(fileName == "bannerfile/thinkertoy.txt" && fileSize != 5558) ||
-		(fileName == "bannerfile/shadow.txt" && fileSize != 7463) {
-		return fileName, errors.New("the Banner file has been altered: ")
+	fileSize := fileInfo.Size()
+	expectedSizes := map[string]int64{
+		"bannerfiles/standard.txt":   6623,
+		"bannerfiles/thinkertoy.txt": 5558,
+		"bannerfiles/shadow.txt":     7463,
+	}
+
+	expectedSize, exists := expectedSizes[fileName]
+	if !exists {
+		return fileName, errors.New("unknown banner file")
+	}
+
+	if fileSize != expectedSize {
+		return fileName, errors.New("the banner file has been altered")
 	}
 
 	return fileName, nil
