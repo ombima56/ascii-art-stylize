@@ -1,19 +1,20 @@
 package ascii
 
 import (
+	"encoding/json"
 	"errors"
 	"html/template"
-	"log"
 	"net/http"
 	"os"
 	"strings"
+	"time"
 )
 
 func ErrorHandler(w http.ResponseWriter, errMsg string, statusCode int) {
 	tmpl, err := template.ParseFiles("templates/error.html")
 	if err != nil {
 		http.Error(w, "500 Internal Server Error", http.StatusInternalServerError)
-		log.Printf("Error parsing error template: %v", err)
+		LogErrorToFile("Error parsing error template: " + err.Error())
 		return
 	}
 
@@ -29,8 +30,37 @@ func ErrorHandler(w http.ResponseWriter, errMsg string, statusCode int) {
 	err = tmpl.Execute(w, data)
 	if err != nil {
 		http.Error(w, "500 Internal Server Error", http.StatusInternalServerError)
-		log.Printf("Error executing error template: %v", err)
+		LogErrorToFile("Error executing error template: " + err.Error())
 	}
+}
+
+type LogEntry struct {
+	Timestamp string `json:timestamp`
+	Message   string `json:"message"`
+}
+
+func LogErrorToFile(errorMessage string) error {
+	logFile, err := os.OpenFile("errors.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		return err
+	}
+	defer logFile.Close()
+
+	logEntry := LogEntry{
+		Timestamp: time.Now().Format(time.RFC3339),
+		Message:   errorMessage,
+	}
+	entryJSON, err := json.Marshal(logEntry)
+	if err != nil {
+		return err
+	}
+
+	_, err = logFile.Write(entryJSON)
+	if err != nil {
+		return err
+	}
+	_, err = logFile.WriteString("\n")
+	return err
 }
 
 func IndexHandler(w http.ResponseWriter, r *http.Request) {
@@ -42,14 +72,14 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl, err := template.ParseFiles("templates/index.html")
 	if err != nil {
 		ErrorHandler(w, "Page Not Found", http.StatusNotFound)
-		log.Printf("Error parsing template: %v", err)
+		LogErrorToFile("Error parsing template: " + err.Error())
 		return
 	}
 
 	err2 := tmpl.Execute(w, nil)
 	if err2 != nil {
 		ErrorHandler(w, "Internal Server Error", http.StatusInternalServerError)
-		log.Printf("Error executing template: %v", err2)
+		LogErrorToFile("Error executing template: " + err2.Error())
 		return
 	}
 }
@@ -80,13 +110,13 @@ func SubmitHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
 			ErrorHandler(w, "Internal Server Error: Banner file not found", http.StatusInternalServerError)
-			log.Printf("Banner file not found: %s", filePath)
+			LogErrorToFile("Banner file not found: " + filePath)
 		} else if err.Error() == "the banner file has been altered" {
 			ErrorHandler(w, "Internal Server Error: An unexpected error occurred. Please try again later.", http.StatusInternalServerError)
-			log.Printf("Banner file altered: %s", filePath)
+			LogErrorToFile("Banner file altered: " + filePath)
 		} else {
 			ErrorHandler(w, "Internal Server Error: An unexpected error occurred. Please try again later.", http.StatusInternalServerError)
-			log.Printf("Error with banner file: %v", err)
+			LogErrorToFile("Error with banner file: " + filePath)
 		}
 		return
 	}
@@ -97,7 +127,7 @@ func SubmitHandler(w http.ResponseWriter, r *http.Request) {
 		result, err := PrintBanner(ch, bannerfile)
 		if err != nil {
 			ErrorHandler(w, "Bad Request: Please use valid characters. Only printable characters from the ASCII table are allowed.", http.StatusBadRequest)
-			log.Printf("Error printing banner: %v", err)
+			LogErrorToFile("Error printing banner: " + err.Error())
 			return
 		}
 		asciified.WriteString(result)
@@ -113,13 +143,13 @@ func SubmitHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl, err := template.ParseFiles("templates/index.html")
 	if err != nil {
 		ErrorHandler(w, "Internal Server Error: An unexpected error occurred. Please try again later.", http.StatusInternalServerError)
-		log.Printf("Error parsing template: %v", err)
+		LogErrorToFile("Error parsing template: " + err.Error())
 		return
 	}
 
 	err = tmpl.Execute(w, Data)
 	if err != nil {
 		ErrorHandler(w, "Internal Server Error: An unexpected error occurred. Please try again later.", http.StatusInternalServerError)
-		log.Printf("Error executing template: %v", err)
+		LogErrorToFile("Error executing template: " + err.Error())
 	}
 }
