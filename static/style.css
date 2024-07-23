@@ -122,26 +122,11 @@ button.submit:hover {
     overflow: hidden;
 }
 
-/* .ascii-output {
-    padding: 20px;
-    border-radius: 5px;
-    border: 1px solid #13465c;
-    background: #13465c;
-    overflow-x: auto;
-    overflow-y: auto;
-    max-height: 300px;
-    text-align: left;
-    color: #f0f0f0;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-    word-wrap: break-word;
-} */
-
 .ascii-output {
     margin-top: 20px;
     width: 100%;
     max-width: 800px;
     text-align: left;
-    padding: 20px;
     border-radius: 8px;
     border: 1px solid #13465c;
     background: #13465c;
